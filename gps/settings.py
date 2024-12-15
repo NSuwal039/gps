@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-&5#bie8afuw1h8s=h%5!c6uj08s)4h!$aq$s+6#vvvmt1ajckc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['gps.goodwish.com.np', '127.0.0.1']
 
 
 # Application definition
@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'stream',
     'user_mgmt',
     'rest_framework',
-    
 ]
 
 MIDDLEWARE = [
@@ -140,5 +139,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SIMPLE_JWT = {
+<<<<<<< HEAD
     "ACCESS_TOKEN_LIFETIME": timedelta(weeks=1),
 }
+=======
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+}
+>>>>>>> 52a3fe3 (dsf)

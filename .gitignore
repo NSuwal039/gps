@@ -1,0 +1,54 @@
+# Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Django migrations
+*/migrations/*
+!*/migrations/__init__.py
+
+# SQLite database
+db.sqlite3
+
+# PostgreSQL database
+*.psql
+*.postgres
+
+# Virtual environment
+venv/
+env/
+.venv/
+.env/
+
+# Django static files
+staticfiles/
+
+# Media files
+media/
+
+# Django secret key file (if you store it in a separate file)
+*.env
+.env/
+
+# PyCharm project files
+.idea/
+
+# VSCode project files
+.vscode/
+
+# macOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+
+# Logs
+*.log
+
+# Test coverage
+.coverage
+*.cover
+
+# Temporary files
+*.swp
+*~

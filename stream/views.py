@@ -4,7 +4,6 @@ from datetime import datetime
 from django.http import StreamingHttpResponse, HttpResponse
 import json
 import redis.asyncio as redis
-from jwt_test.decorators import jwt_required
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.views import APIView
 from asgiref.sync import async_to_sync

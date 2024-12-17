@@ -54,5 +54,5 @@ class LocationData(models.Model):
     
     class Meta:
         indexes = [
-            models.Index(fields=['gps_imei', 'time'])
+            models.Index(fields=['gps_imei', '-time'])
         ]

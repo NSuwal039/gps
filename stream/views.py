@@ -10,6 +10,7 @@ from asgiref.sync import async_to_sync
 import jwt
 from rest_framework.exceptions import AuthenticationFailed
 from django.conf import settings
+from user_mgmt.models import LocationData, GPS
 
 # Create your views here.
 
@@ -26,6 +27,12 @@ async def _listen_to_redis(pubsub):         # if timeout is needed
 async def stream_event(client:redis.Redis, imei:str,request):
     pubsub = client.pubsub()
     await pubsub.subscribe(imei)
+    
+    latest_data = LocationData.objects.filter(gps=imei).values(
+        'latitude', 'longitude', 'time','speed','course'
+    ).order_by('-time')[0]
+    print(latest_data)
+    
     try:
         while True:
             message = await pubsub.get_message(ignore_subscribe_messages=True)

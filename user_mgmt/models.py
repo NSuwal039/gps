@@ -10,13 +10,13 @@ class OwnerType(models.TextChoices):
     PERSON = 'P', _('Person')
 
 class Organization(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     address = models.CharField(255, null=True, blank=True)
     user = models.OneToOneField(user_model, on_delete=models.CASCADE)
 
 class Department(models.Model):
     name = models.CharField(max_length=255)
-    department = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     user = models.OneToOneField(user_model, on_delete=models.CASCADE)
 
 class Person(models.Model):
@@ -39,7 +39,7 @@ class GPS(models.Model):
                 check=(
                     models.Q(owner_type = OwnerType.PERSON, owner_org__isnull=True, owner_dept__isnull=True, owner_person__isnull=False)|
                     models.Q(owner_type = OwnerType.DEPARTMENT, owner_org__isnull=True, owner_dept__isnull=False, owner_person__isnull=True)|
-                    models.Q(owner_type = OwnerType.ORGANIZATION, owner_org__isnull=False, owner_dept__isnull=False, owner_person__isnull=True)
+                    models.Q(owner_type = OwnerType.ORGANIZATION, owner_org__isnull=False, owner_dept__isnull=True, owner_person__isnull=True)
                 )
             )
         ]

@@ -29,11 +29,11 @@ class Organization(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=255)
-    organization = models.OneToOneField(Organization, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 class Person(models.Model):
-    department = models.OneToOneField(Department, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)    
     
 class GPS(models.Model):
@@ -41,7 +41,7 @@ class GPS(models.Model):
     brand = models.CharField(null=True, blank=True)
     
     owner_type = models.CharField(max_length=1, choices=OwnerType, default=OwnerType.DEPARTMENT)
-    owner_org = models.OneToOneField(Organization, on_delete=models.CASCADE, null=True, blank=True)
+    owner_org = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True)
     owner_dept = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, blank=True)
     owner_person = models.ForeignKey(Person, on_delete=models.CASCADE, null=True, blank=True)
     

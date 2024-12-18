@@ -152,10 +152,10 @@ class PersonViewSet(ModelViewSet):
             return Response(
                 {'error':person_serializer.errors},
                 status=status.HTTP_400_BAD_REQUEST
-            )
+            )   
         try:
-            person_serializer.save()
-            
+            p=person_serializer.save()
+            print(p)
             return Response(
                 person_serializer.data,
                 status=status.HTTP_200_OK

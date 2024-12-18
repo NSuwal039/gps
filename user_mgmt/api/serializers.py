@@ -16,7 +16,7 @@ class DepartmentSerializer(ModelSerializer):
 
 class PersonSerializer(ModelSerializer):
     class Meta:
-        model = Department
+        model = Person
         fields = '__all__'
 
 class GPSSerializer(ModelSerializer):
@@ -41,4 +41,4 @@ class UserSerializer(serializers.ModelSerializer):
             
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name','group', 'is_superuser']
+        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name','group', 'is_superuser', 'user_type']

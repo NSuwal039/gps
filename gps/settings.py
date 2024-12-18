@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     
     'stream',
     'user_mgmt',
-    'rest_framework'
+    'rest_framework',
+    
 ]
 
 MIDDLEWARE = [

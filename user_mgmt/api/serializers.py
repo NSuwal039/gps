@@ -2,6 +2,7 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from ..models import *
 from django.contrib.auth.models import Group, User
+from django.conf import settings
 
 class OrganizationSerializer(ModelSerializer):
     class Meta:
@@ -39,5 +40,5 @@ class UserSerializer(serializers.ModelSerializer):
         return [item.name for item in obj.groups.all()]
             
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name','group', 'is_superuser']

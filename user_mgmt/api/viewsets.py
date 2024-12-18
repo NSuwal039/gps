@@ -15,7 +15,7 @@ class OrganizationViewSet(ModelViewSet):
     
     @transaction.atomic
     def create(self, request):
-        org_data = request.data.get('org')
+        org_data = request.data.get('organization')
         user_data = request.data.get('user')
         if org_data == None:
             return Response(
@@ -28,24 +28,25 @@ class OrganizationViewSet(ModelViewSet):
                 {'error': 'User data not provided.'},
                 status=status.HTTP_400_BAD_REQUEST
             )            
-            
+        
+        user_data['user_type']='O'
+        user_serializer = UserSerializer(data=user_data)
+        if not user_serializer.is_valid():
+            transaction.set_rollback(True)
+            return Response(
+                {'errors': user_serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        user = user_serializer.save()
+        
+        org_data['user']=user.pk
+        org_serializer = self.get_serializer(data=org_data)
+        if not org_serializer.is_valid():
+            return Response(
+                {'error':org_serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         try:
-            user_serializer = UserSerializer(data=user_data)
-            if not user_serializer.is_valid():
-                transaction.set_rollback(True)
-                return Response(
-                    {'errors': user_serializer.errors},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            user = user_serializer.save()
-            
-            org_data['user']=user.pk
-            org_serializer = self.get_serializer(data=org_data)
-            if not org_serializer.is_valid():
-                return Response(
-                    {'error':org_serializer.errors},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
             org_serializer.save()
             
             return Response(
@@ -83,25 +84,24 @@ class DepartmentViewSet(ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )            
             
+        user_data['user_type']='D'
+        user_serializer = UserSerializer(data=user_data)
+        if not user_serializer.is_valid():
+            return Response(
+                {'errors': user_serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        user = user_serializer.save()
+        dept_data['user']=user.pk
+        dept_serializer = self.get_serializer(data=dept_data)
+        if not dept_serializer.is_valid():
+            transaction.set_rollback(True)
+            return Response(
+                {'error':dept_serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         try:
-            user_serializer = UserSerializer(data=user_data)
-            if not user_serializer.is_valid():
-                return Response(
-                    {'errors': user_serializer.errors},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            user = user_serializer.save()
-            
-            dept_data['user']=user.pk
-            dept_serializer = self.get_serializer(data=dept_data)
-            if not dept_serializer.is_valid():
-                transaction.set_rollback(True)
-                return Response(
-                    {'error':dept_serializer.errors},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
             dept_serializer.save()
-            
             return Response(
                 dept_serializer.data,
                 status=status.HTTP_200_OK
@@ -109,7 +109,6 @@ class DepartmentViewSet(ModelViewSet):
             
         except Exception as e:
             transaction.set_rollback(True)
-            
             return Response(
                 {'error':e},
                 status=status.HTTP_400_BAD_REQUEST
@@ -137,23 +136,24 @@ class PersonViewSet(ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )            
             
+        user_data['user_type']='P'
+        user_serializer = UserSerializer(data=user_data)
+        if not user_serializer.is_valid():
+            return Response(
+                {'errors': user_serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        user = user_serializer.save()
+        
+        person_data['user']=user.pk
+        person_serializer = self.get_serializer(data=person_data)
+        if not person_serializer.is_valid():
+            transaction.set_rollback(True)
+            return Response(
+                {'error':person_serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         try:
-            user_serializer = UserSerializer(data=user_data)
-            if not user_serializer.is_valid():
-                return Response(
-                    {'errors': user_serializer.errors},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            user = user_serializer.save()
-            
-            person_data['user']=user.pk
-            person_serializer = self.get_serializer(data=person_data)
-            if not person_serializer.is_valid():
-                transaction.set_rollback(True)
-                return Response(
-                    {'error':person_serializer.errors},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
             person_serializer.save()
             
             return Response(

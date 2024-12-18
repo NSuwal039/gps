@@ -1,27 +1,34 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 # Create your models here.
 
-user_model = get_user_model()
 class OwnerType(models.TextChoices):
     ORGANIZATION = 'O', _('Organization')
     DEPARTMENT = 'D', _('Department')
     PERSON = 'P', _('Person')
 
+class CustomUser(AbstractUser):
+    user_type = models.CharField(max_length=1, choices=OwnerType)
+    
+    class Meta:
+        db_table = 'auth_user'
+
 class Organization(models.Model):
     name = models.CharField(max_length=255, unique=True)
     address = models.CharField(255, null=True, blank=True)
-    user = models.OneToOneField(user_model, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 class Department(models.Model):
     name = models.CharField(max_length=255)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    user = models.OneToOneField(user_model, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 class Person(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
-    user = models.OneToOneField(user_model, on_delete=models.CASCADE)    
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)    
     
 class GPS(models.Model):
     imei = models.CharField(max_length=15, primary_key=True)

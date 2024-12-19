@@ -139,10 +139,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SIMPLE_JWT = {
-<<<<<<< HEAD
-    "ACCESS_TOKEN_LIFETIME": timedelta(weeks=1),
+   "ACCESS_TOKEN_LIFETIME": timedelta(weeks=1),
+
 }
-=======
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
-}
->>>>>>> 52a3fe3 (dsf)
+

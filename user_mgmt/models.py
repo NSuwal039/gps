@@ -9,6 +9,7 @@ class OwnerType(models.TextChoices):
     ORGANIZATION = 'O', _('Organization')
     DEPARTMENT = 'D', _('Department')
     PERSON = 'P', _('Person')
+    ADMIN = 'A', _('Admin')
 
 class CustomUser(AbstractUser):
     user_type = models.CharField(max_length=1, choices=OwnerType)
@@ -19,8 +20,11 @@ class CustomUser(AbstractUser):
     def get_associated_entity(self):
         if self.user_type == 'O':
             return self.organization
-
-        return self.department if self.user_type=='D' else self.person
+        if self.user_type == 'D':
+            return self.department
+        if self.user_type == 'P':
+            return self.person
+        return None
 
 class Organization(models.Model):
     name = models.CharField(max_length=255, unique=True)

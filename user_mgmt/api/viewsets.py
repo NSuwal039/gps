@@ -7,6 +7,11 @@ from rest_framework import status
 from django.contrib.auth.models import User, Group
 from django.db import transaction
 from ..views import org_with_gps, dept_with_gps
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
+
 
 class OrganizationViewSet(ModelViewSet):
     serializer_class = OrganizationSerializer
@@ -18,6 +23,12 @@ class OrganizationViewSet(ModelViewSet):
         if request.user == Organization.objects.get(id=kwargs['pk']).user or request.user.is_superuser:
             return Response(org_with_gps(kwargs['pk']))    
         return super().retrieve(request, *args, **kwargs)
+
+    def get_permissions(self):
+        if self.action == 'create':
+            return []
+        else:
+            return [IsAuthenticated()]
 
     @transaction.atomic
     def create(self, request):
@@ -196,3 +207,16 @@ class LocationDataViewSet(ModelViewSet):
 @api_view
 def stream_gps_data(request, imei:str):
     pass
+
+class CustomAuthenticationSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        
+        user = self.user
+        print(user)
+        
+        return data
+
+class CustomAuthenticationView(TokenObtainPairView):
+    serializer_class = CustomAuthenticationSerializer
+    

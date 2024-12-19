@@ -5,7 +5,51 @@ from .models import *
 import json
 import time
 from django.db import connection
-# Create your views here.
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import AllowAny
+from rest_framework import status
+
+class ObtainTokenPairView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        print('Hello')
+        if 'username' in data and 'password' in data:
+            from django.contrib.auth import authenticate
+            user = authenticate(username=data['username'], password=data['password'])
+            if user is not None:
+                print(user)
+                print(f'{user.get_associated_entity()}')
+                refresh = RefreshToken.for_user(user)
+                return Response({
+                    'access': str(refresh.access_token),
+                    'refresh': str(refresh),
+                    'user_type': user.user_type,
+                    'user_id':user.get_associated_entity().id
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "Bad request, missing username or password"}, status=status.HTTP_400_BAD_REQUEST)
+
+class RefreshTokenView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        refresh_token = request.data.get('refresh')
+        if refresh_token:
+            try:
+                # Validate and create a new access token from the refresh token
+                refresh = RefreshToken(refresh_token)
+                new_access_token = str(refresh.access_token)
+                return Response({
+                    'access': new_access_token
+                }, status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "No refresh token provided"}, status=status.HTTP_400_BAD_REQUEST)
 
 def hello(request):
     return HttpResponse('Hello')

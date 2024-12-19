@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-&5#bie8afuw1h8s=h%5!c6uj08s)4h!$aq$s+6#vvvmt1ajckc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['gps.goodwish.com.np', '127.0.0.1']
+ALLOWED_HOSTS = ['gps.goodwish.com.np', '127.0.0.1','localhost']
 
 
 # Application definition

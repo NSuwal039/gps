@@ -6,13 +6,19 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.contrib.auth.models import User, Group
 from django.db import transaction
+from ..views import org_with_gps, dept_with_gps
 
 class OrganizationViewSet(ModelViewSet):
     serializer_class = OrganizationSerializer
     
     def get_queryset(self):
         return Organization.objects.all()
-    
+
+    def retrieve(self, request, *args, **kwargs):
+        if request.user == Organization.objects.get(id=kwargs['pk']).user or request.user.is_superuser:
+            return Response(org_with_gps(kwargs['pk']))    
+        return super().retrieve(request, *args, **kwargs)
+
     @transaction.atomic
     def create(self, request):
         org_data = request.data.get('organization')
@@ -67,6 +73,11 @@ class DepartmentViewSet(ModelViewSet):
     
     def get_queryset(self):
         return Department.objects.all()
+    
+    def retrieve(self, request, *args, **kwargs):
+        if request.user == Department.objects.get(id=kwargs['pk']).user or request.user.is_superuser:
+            return Response(dept_with_gps(kwargs['pk']))
+        return super().retrieve(request, *args, **kwargs)
     
     @transaction.atomic
     def create(self, request):

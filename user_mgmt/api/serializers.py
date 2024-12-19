@@ -5,6 +5,10 @@ from django.contrib.auth.models import Group, User
 from django.conf import settings
 
 class OrganizationSerializer(ModelSerializer):
+    user_details = serializers.SerializerMethodField()
+    
+    def get_user_details(self, obj):
+        return UserSerializer(obj.user).data
     class Meta:
         model = Organization
         fields = '__all__'

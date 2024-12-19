@@ -56,6 +56,11 @@ class GPS(models.Model):
                 )
             )
         ]
+    
+    def get_owner(self):
+        if self.owner_org!=None:
+            return self.owner_org
+        return self.owner_dept if self.owner_dept!=None else self.owner_person 
 
 class LocationData(models.Model):
     gps_imei = models.ForeignKey(GPS, on_delete=models.CASCADE)

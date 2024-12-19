@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from .routers import router
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from user_mgmt.views import org_with_gps
+from user_mgmt.views import dept_with_gps
 
 
 urlpatterns = [
@@ -27,5 +27,5 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh_view'),
     path('api/', include(router.urls)),
     path('', include('stream.urls')),
-    path('orgs/', org_with_gps, name='orgs')
+    path('orgs/', dept_with_gps, name='orgs')
 ]

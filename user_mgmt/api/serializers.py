@@ -46,3 +46,17 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name','group', 'is_superuser', 'user_type']
+    
+    def create(self, validated_data):
+        # Ensure the password is hashed before saving
+        password = validated_data.pop('password')
+        user = CustomUser(**validated_data)
+        user.set_password(password)  # Hash the password
+        user.save()
+        return user
+    
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        if password:
+            instance.set_password(password)  # Hash the password if it's provided
+        return super().update(instance, validated_data)

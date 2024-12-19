@@ -16,9 +16,9 @@ db.sqlite3
 
 # Virtual environment
 venv/
-env/
+gps_env/
 .venv/
-.env/
+.gps_env/
 
 # Django static files
 staticfiles/

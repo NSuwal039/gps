@@ -23,6 +23,12 @@ class OrganizationViewSet(ModelViewSet):
         if request.user == Organization.objects.get(id=kwargs['pk']).user or request.user.is_superuser:
             return Response(org_with_gps(kwargs['pk']))    
         return super().retrieve(request, *args, **kwargs)
+    
+    def get_permissions(self):
+        if self.action == 'create':
+            return []
+        else:
+            return [permission() for permission in self.get_default_permissions()]
 
     def get_permissions(self):
         if self.action == 'create':

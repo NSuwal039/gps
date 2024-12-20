@@ -28,7 +28,7 @@ class ObtainTokenPairView(APIView):
                     'access': str(refresh.access_token),
                     'refresh': str(refresh),
                     'user_type': user.user_type,
-                    'user_id':user.get_associated_entity().id if user.user_type!=None else None
+                    'user_id':user.get_associated_entity().id if user.user_type not in [None, 'A'] else None
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)

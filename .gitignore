@@ -22,7 +22,7 @@ gps_env/
 
 # Django static files
 staticfiles/
-
+gps/settings.py
 # Media files
 media/
 
